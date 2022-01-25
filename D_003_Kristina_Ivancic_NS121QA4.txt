@@ -1,0 +1,53 @@
+1. prikazati datum, id_korisnik i ukupnu cenu iz narudzbine koja ima sve ocene 5
+
+SELECT n.datum, n.id_korisnik, n.ukupna_cena FROM narudzbina n
+JOIN ocene o ON n.id_narudzbina=o.id_narudzbina
+WHERE o.kvalitet='5' AND o.cena='5' AND o.usluga='5';
+
+2. prikazati ime korisnika koji je dao sve 5 za ocene za narudzbinu
+
+Select k.korisnicko_ime, k.id_korisnik, o.kvalitet, o.usluga, o.cena from korisnik k
+JOIN narudzbina n ON k.id_korisnik = n.id_korisnik 
+JOIN ocene o ON n.id_narudzbina = o.id_narudzbina 
+WHERE o.kvalitet='5' AND o.cena='5' AND o.usluga='5';
+
+ 
+3. prikazati prosecnu ocenu za uslugu za svakog korisnika (grupisati po korisnicima)
+
+SELECT AVG(o.usluga), k.korisnicko_ime FROM korisnik k
+JOIN narudzbina n ON k.id_korisnik = n.id_korisnik
+JOIN ocene o ON n.id_narudzbina = o.id_narudzbina
+GROUP BY k.id_korisnik;
+
+
+4. prikazati prosecnu ocenu za uslugu od ocena koje je dao Pera
+
+SELECT AVG(o.usluga), k.korisnicko_ime FROM ocene o
+JOIN narudzbina n ON n.id_narudzbina = o.id_narudzbina
+JOIN korisnik k ON n.id_korisnik = k.id_korisnik
+WHERE k.korisnicko_ime='Pera'
+GROUP BY k.id_korisnik;
+
+
+
+5. **prikazati koja je najveca prosecna ocena (po korisniku) za usluge
+
+6. prikazati koliko je narudzbina imao svaki restoran (prikazati samo id_restorana i broj narudzbina za taj restoran)
+
+SELECT n.id_restorana, COUNT(n.id_narudzbina) AS broj_narudzbina FROM narudzbina n
+GROUP BY n.id_restorana;
+
+7. prikazati adrese restorana i sumu koliko je koji restoran zaradio u opadajucem poretku
+
+SELECT SUM(n.ukupna_cena), r.adresa FROM narudzbina n
+JOIN restoran_objekat r ON r.id_restorana=n.id_restorana
+GROUP BY r.id_restorana 
+ORDER BY SUM (n.ukupna_cena) DESC;
+
+
+8. prikazati koja su jela otisla na koje adrese iz narudzbina  (prikazati NAZIVE jela i adrese iz narudzbine)
+
+SELECT n.adresa, naziv FROM jelo j
+JOIN ponuda p ON p.id_jelo=j.id_jelo
+JOIN narudzbina n ON p.id_restorana=n.id_restorana;
+
